@@ -10,69 +10,95 @@
 #define TRUE 1 
 #define FALSE 0
 
-//Estruturas 
+//Estruturas ----------------------------------------------------------------------
+typedef struct {
+	
+	int cpf;
+	char email[15];
+	char nome[15];
+	short sexo; // 0-mulher 1-homem
+	char dataNasc[10];
+	
+} pessoa;
+
 typedef struct {
 	
 	char titulo[30];
-	char editora[30];
-	short edicao;
-	short quantPag;
+	char editora[15];
+	pessoa autor;
+	char areaC[30];
 	short quantidade;
 
 } livro;
 
 typedef struct {
 	
-	char titulo[30];
-	char revista[30];
-	short mes; //12 Meses 1 - Janeiro | 2 - Fevereiro ...
-	short ano;
-	short quantidade;
+	short tipo;
+	char numero[12];
+	short operadora; //Tim-0  Vivo-1  Oi-2 Claro-3 Nextel-4 Correios-5
 	
-} revista;
+} telefone;
 
 typedef struct {
 	
-	char artista[30];
-	char gravadora[30];
-	short quantFaixas;
-	short quantidade;
+	char logradouro[30];
+	int num;
+	char complemento[15];
+	char bairro[15];
+	int cep;
+	char estado[3]; //Usar UF 
+	char cidade[15];
 	
-} cd;
+} endereco;
 
 typedef struct {
 	
-	char titulo[30];
-	char produtor[30];
-	short minutos;
-	short quantidade;
+	char dataEmp[10];
+	char dataEst[10];
+	char dataCon[10];
+	int idAluno;
+	int idFunc;
+
 	
-} dvd;
+ } emprestimo;
 
 typedef struct {
 	
-	char nome[30];
-	char desenvolvedora[30];
-	short quantidade;
-	
-	
-} jogos;
-
-typedef struct {
-	
-	char nome[30];
+	pessoa estudante;
 	int matricula;
-	short emprestimo;
+	short sitMatr; // 0-trancada 1-ativa 2-jubilada
+	char turma;
+	endereco end;
+	telefone tel;
 	
 } aluno;
 
+typedef struct {
+	
+	short idAdm; // 0-funcionario 1-administrador
+	char login[10];
+	char senha[10];
+	endereco end;
+	telefone tel;
+	pessoa func;
+	
+} funcionario;
 
 
-//Protopatipação de Funções
+
+//Protopatipação de Funções ---------------------------------------------------------------
+void menu();
+
+
+//Funções ----------------------------------------------------------------------------------
 
 
 
-//função Primaria
+void menu () {
+	
+}
+
+//função Primaria --------------------------------------------------------------------------
 int main () {
 	
 	setlocale(LC_ALL, "ptb");
