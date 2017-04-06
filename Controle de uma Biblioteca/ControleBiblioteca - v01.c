@@ -230,6 +230,12 @@ void menu () {
 		criarListaLivro(&L);
 		criarListaEmp(&E);
 
+		
+		
+		strcpy(F.F[5].func.login,"adm");
+		strcpy(F.F[5].func.senha,"123");
+		F.F[5].idAdm = 2;
+		
 		//carregarArquivosFunc(&F);
 		//carregarArquivosAluno(&A);
 		//carregarArquivosEdit(&ED);
@@ -239,17 +245,18 @@ void menu () {
 		printf ("\n\n\tRecomendamos que use a tela em tamanho máximo para mais conforto.");
 		sleep(3);
 
-		int login;
+		short loginS = 0;
 		int i; //Usado para os laços de repetição sem comprometimento e necessidade posterior de
 		//uma posição qualquer da contagem
 		do {
+			
 			system ("cls");
 			printf ("\n\t\t\tLOGIN\n\n\n");
 			printf("\n\t1 - Funcionário");
 			printf("\n\t2 - Aluno");
 			printf("\n\t3 - Sair");
 			printf("\n\tOpcão: ");
-			scanf("%d", &login);
+			scanf("%d", &loginS);
 			fflush(stdin);
 
 			short saidaLogin = 0;
@@ -259,11 +266,12 @@ void menu () {
 			char login[10], senha[10];
 			short aux = 0;
 
-			if (login == 1) {
+			if (loginS == 1) {
 
-				do {
+				do { //Checar Login de funcionario e gerente
 					saidaLogin = 0;
 
+					system("cls");
 					printf ("\n\t\t\tLOGIN\n\n\n");
 					printf ("\n\tUser: ");
 					scanf ("%s", &login);
@@ -303,6 +311,7 @@ void menu () {
 							printf("\n\tDeseja tentar novamente?");
 							printf("\n\tS - Sim, parece ótimo.");
 							printf("\n\tN - Não, sair.");
+							printf("\n\tOpção: ");
 							scanf ("%c", &loginErro);
 
 							if (loginErro == 's' || loginErro =='S') {
@@ -381,7 +390,7 @@ void menu () {
 
 							} while (menuS != 7);
 
-						} else if (menuP == 2) { // Menu funcionario
+						} else if (menuP == 2) { 
 							menuS = 0;
 							do {
 
@@ -725,11 +734,84 @@ void menu () {
 
 			}   
 
-			} 
+			} else if (loginS == 2){ //Menu para o aluno -----------------------------------------------
+			
+				
+				do { //Checar Login de aluno
+					saidaLogin = 0;
+
+					system("cls");
+					printf ("\n\t\t\tLOGIN\n\n\n");
+					printf ("\n\tUser: ");
+					scanf ("%s", &login);
+					fflush(stdin);
+					printf("\n\tSenha: ");
+					scanf ("%s", &senha);
+					fflush(stdin);
+
+					for (i = 0; i < 50; i++) {
+
+						if (strcmp(A.A[i].estudante.login,login) == 0 && strcmp(A.A[i].estudante.senha,senha)) {
+
+							printf ("\n\n\tLogin realizado com sucesso!");
+							saidaLogin = 1;
+
+						}
+
+					}
+
+					if (saidaLogin == 0) {
+
+						aux = 0;
+						do {
+
+							system ("cls");
+							printf ("\n\t\t\tLOGIN\n\n\n");
+							printf ("\n\n\tSenha e/ou usuário está(ão) errado(s).");
+							printf("\n\tDeseja tentar novamente?");
+							printf("\n\tS - Sim, parece ótimo.");
+							printf("\n\tN - Não, sair.");
+							printf("\n\tOpção: ");
+							scanf ("%c", &loginErro);
+
+							if (loginErro == 's' || loginErro =='S') {
+
+								aux = 1;
+
+							} else if (loginErro == 'n' || loginErro =='N') {
+
+								aux = 2;
+								saidaLogin = 2;
+
+							}
+
+
+						} while(aux != 1 && aux != 2);
+
+					}
+
+
+				} while (saidaLogin != 1 && saidaLogin != 2);
+				
+				if(saidaLogin == 1) {
+					
+					//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					
+				}
+			
+			
+			}
+
+			//salvarArquivosFunc(F);
+			//salvarArquivosAluno(A);
+			//salvarArquivosEdit(ED);
+			//salvarArquivosLivro(L);
+			//salvarArquivosEmp(E);
 
 			printf("\n\n\n\tObrigado por utilizar nosso sistema.");
+			
 
-		} while (login != 3);
+		} while (loginS != 3);
 
 	} while (0);
 }	
