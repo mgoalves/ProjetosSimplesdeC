@@ -796,7 +796,33 @@ void menu () {
 				if(saidaLogin == 1) {
 					
 					//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					menuS = 0;
+					do{
 					
+					
+					system("cls");
+					printf ("\n\t\t\tMENU ALUNO\n\n\n");
+
+					printf("\n\t1 - Consultar Livros");
+					printf("\n\t2 - Reservar Livro");
+					printf("\n\t3 - Verificar dados cadastrais");
+					printf("\n\t4 - Acompanhar emprestimo");
+					printf("\n\t5 - Sair");
+					printf("\n\tOpcão: ");
+					scanf("%d", &menuS);
+					fflush(stdin);
+						
+						if (menuS == 1) {
+							
+						} else if (menuS == 2) {
+							
+						} else if (menuS == 3) {
+							
+						} else if (menuS == 4) {
+							
+						}
+					
+					} while (menuS != 5);
 				}
 			
 			
