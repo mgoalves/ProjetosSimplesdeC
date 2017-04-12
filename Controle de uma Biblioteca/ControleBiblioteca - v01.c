@@ -152,6 +152,8 @@ typedef struct {
 
 //Protopatipação de Funções na ordem em que esão dispostas no decorrer do codigo
 
+void salvarArquivosFunc(funcEST F);
+void carregarArquivosFunc(funcEST *F);
 void editarLivro(livroEST L);
 void cadastrarLivro(livroEST *L, editEST ED);
 void consultarLivro(livroEST L, editEST ED);
@@ -213,11 +215,136 @@ int verificarListaCheiaEmp (empEST E) {
 	return(E.Ult == qEmprestimos); // Quando Ult apontar para a posição Max a lista está cheia
 }
 
+void salvarArquivosFunc (funcEST F) {
+	
+	FILE *arquivo;
+	
+	fopen("Funcionarios.txt", "w+");
+	
+	int i;
+	
+	
+	for (i = 0; i < qFunc; i++) {
+		
+		fprintf(arquivo, "%d;%s;%d;%s;%s;%s;%s;%d;%d;%s;%s;%s;%s;%s;%d;%s;%d;%d\n", 
+		
+				F.F[i].idAdm, 
+				F.F[i].end.bairro, 
+				F.F[i].end.cep, 
+				F.F[i].end.cidade, 
+				F.F[i].end.complemento, 
+				F.F[i].end.estado, 
+				F.F[i].end.logradouro, 
+				F.F[i].end.num,
+				F.F[i].func.cpf, 
+				F.F[i].func.dataNasc, 
+				F.F[i].func.email, 
+				F.F[i].func.login, 
+				F.F[i].func.nome, 
+				F.F[i].func.senha, 
+				F.F[i].func.sexo,
+				F.F[i].tel.numero, 
+				F.F[i].tel.operadora, 
+				F.F[i].tel.tipo
+			);
+		
+	}
+}
 
 
+void carregarArquivosFunc(funcEST *F){
+
+	FILE *arquivo;
+	
+	arquivo = fopen("Funcionarios.txt", "r+");	
+	
+	char linha[250];
+	int i;
+	funcionario aux[qFunc];
+	int A, P = F -> Prim;
+	
+	//------------------
+		
+		char* save = NULL;	
+	
+
+	for(i = 0; i < qFunc; i++){
+		
+		fscanf(arquivo, "%s", linha);
+		
+			aux[i].idAdm = atoi (strtok(linha, ";"));
+
+			save = strtok(NULL,";");			
+			strcpy(aux[i].end.bairro, strdup(save));
+			aux[i].end.cep = atoi (strtok(NULL, ";"));
+			save = strtok(NULL,";");
+			strcpy(aux[i].end.cidade, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux[i].end.complemento, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux[i].end.estado, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux[i].end.logradouro, strdup(save));
+			aux[i].end.num = atoi (strtok(NULL, ";"));
+		
+		
+			aux[i].func.cpf = atoi (strtok(NULL, ";"));
+			save = strtok(NULL,";");
+			strcpy(aux[i].func.dataNasc, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux[i].func.email, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux[i].func.login, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux[i].func.nome, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux[i].func.senha, strdup(save));
+			aux[i].func.sexo = atoi (strtok(NULL, ";"));
+			save = strtok(NULL,";");
+			strcpy(aux[i].tel.numero, strdup(save));
+			aux[i].tel.operadora = atoi (strtok(NULL, ";"));
+			aux[i].tel.tipo = atoi (strtok(NULL, "\n"));
+			
+			
+			
+		//Codigo para adionar o item na lista, como já está estipulado o tamanho maximo
+		//nao precisa checar se a fila está cheia ou não.
+	
+		
+	}
+	
+	getch();
+
+	
+	for (i = 0; i <qFunc; i++) {
+		
+		P = F -> Prim;
+	
+		while ((P < F -> Ult))
+			P++;
+
+		if(P == F-> Ult) {
+
+			F -> F[P] = aux[i];
+			F -> Ult ++;
+
+		} else {
+
+			for(A = F-> Ult; A > P; A--)
+				F -> F[A] = F -> F[A-1];
+			F -> F[P] = aux[i];
+			F -> Ult++;
+		}
+		
+	}
+
+	
+	fclose(arquivo);
+	
+}
 
 
-void editarLivro(livroEST L){ //Criar excessão quando já houver um exemplar emprestado.
+void editarLivro(livroEST L){
 	
 	int i; short aux = - 1; char saida = 'n'; livro X;
 	char livro[30];
@@ -257,32 +384,45 @@ void editarLivro(livroEST L){ //Criar excessão quando já houver um exemplar empr
 			} while (saida != 'n' && saida != 'N' && saida != 's' && saida != 'S');
 		
 		} else {
+			
+			if (L.L[aux].quantidade != L.L[aux].disponiveis) {
+				
+				system("cls");
+				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+				printf("\n\tSub Menu -> Livros -> Editar Livros");
+				
+				printf("\n\n\tInfelizmente um dos livros se encontra emprestado.\n\tNão é possível fazer alterações enquanto todos os exemplares forem devolvidos!");
+				
+				
+			} else {
+			
+				system("cls");
+				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+				printf("\n\tSub Menu -> Livros -> Editar Livros");		
+				printf("\n\tLivro '%s'encotrado: ", livro);
+			
+				printf("\n\n\tNovo Titulo: ");
+				gets(X.titulo);
+				fflush(stdin);
+			
+				printf("\n\tNova area de conhecimento: ");
+				gets(X.areaC);
+				fflush(stdin);
+			
+				printf("\n\tNovo Autor: ");
+				gets(X.autor);
+				fflush(stdin);
+			
+				printf("\n\tNova Quantidade de exemplares: ");
+				scanf(" %d", X.quantidade);
+				X.disponiveis = X.quantidade;
+				fflush(stdin);
 		
-			system("cls");
-			printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
-			printf("\n\tSub Menu -> Livros -> Editar Livros");		
-			printf("\n\tLivro '%s'encotrado: ", livro);
-			
-			printf("\n\n\tNovo Titulo: ");
-			gets(X.titulo);
-			fflush(stdin);
-			
-			printf("\n\tNova area de conhecimento: ");
-			gets(X.areaC);
-			fflush(stdin);
-			
-			printf("\n\tNovo Autor: ");
-			gets(X.autor);
-			fflush(stdin);
-			
-			printf("\n\tNova Quantidade de exemplares: ");
-			scanf(" %d", X.quantidade);
-			X.disponiveis = X.quantidade;
-			fflush(stdin);
-		
-			L.L[aux] = X;
-		
-			printf("\n\n\tDados salvos com sucesso.");
+				L.L[aux] = X;
+				
+				printf("\n\n\tDados salvos com sucesso.");			
+				
+			}
 		
 		}
 		
@@ -341,29 +481,31 @@ void cadastrarLivro(livroEST *L, editEST ED){
 			
 		} else if (aux == 2) {
 			
-			printf("\n\n\tTitulo: ");
-			gets(X.titulo);
-			fflush(stdin);
-			
-			printf("\n\tArea de conhecimento: ");
-			gets(X.areaC);
-			fflush(stdin);
-			
-			printf("\n\tAutor: ");
-			gets(X.autor);
-			fflush(stdin);
-			
-			printf("\n\tQuantidade de exemplares: ");
-			scanf(" %d", X.quantidade);
-			X.disponiveis = X.quantidade;
-			X.editora = codED;
-			fflush(stdin);
 			
 			if (verificarListaCheiaLivro(*L)) {
 
 				printf("\n\n\tA lista está cheia logo não foi possível adicionar um novo item.");
 
 			} else {
+				
+				printf("\n\n\tTitulo: ");
+				gets(X.titulo);
+				fflush(stdin);
+			
+				printf("\n\tArea de conhecimento: ");
+				gets(X.areaC);
+				fflush(stdin);
+			
+				printf("\n\tAutor: ");
+				gets(X.autor);
+				fflush(stdin);
+			
+				printf("\n\tQuantidade de exemplares: ");
+				scanf(" %d", X.quantidade);
+				X.disponiveis = X.quantidade;
+				X.editora = codED;
+				fflush(stdin);
+				
 				while ((P < L -> Ult))
 					P++;
 	
@@ -386,7 +528,6 @@ void cadastrarLivro(livroEST *L, editEST ED){
 		
 	} while (saida != 'n' && saida != 'N');
 
-	
 }
 
 void consultarLivro(livroEST L, editEST ED) {
@@ -412,9 +553,7 @@ void consultarLivro(livroEST L, editEST ED) {
 		}
 		
 	}
-	
-		
-		
+			
 		//Comparação de ID para exibir na tela.
 		if (aux == -1) {
 		
@@ -433,11 +572,9 @@ void consultarLivro(livroEST L, editEST ED) {
 			} while (saida != 'n' && saida != 'N' && saida != 's' && saida != 'S');
 		
 		} else {
-		
 					
 			printf("\n\n\tLivro '%s'encotrado: ", livro);
-		
-		
+			
 			//Comparação de ID para exibir na tela.
 			for (i = 0; i < qEditoras; i++) {
 		
@@ -455,9 +592,7 @@ void consultarLivro(livroEST L, editEST ED) {
 				
 		
 		}
-	
-	
-	
+
 	} while (saida != 'n' && saida != 'N');	 
 	
 }
@@ -479,13 +614,15 @@ void menu () {
 		criarListaLivro(&L);
 		criarListaEmp(&E);
 
-		
-		
+				
 		strcpy(F.F[5].func.login,"adm");
 		strcpy(F.F[5].func.senha,"123");
-		F.F[5].idAdm = 2;
+		F.F[5].idAdm = 1;
 		
-		//carregarArquivosFunc(&F);
+		strcpy(A.A[5].estudante.login,"adm");
+		strcpy(A.A[5].estudante.senha,"123");
+		
+		carregarArquivosFunc(&F);
 		//carregarArquivosAluno(&A);
 		//carregarArquivosEdit(&ED);
 		//carregarArquivosLivro(&L);
@@ -1010,7 +1147,7 @@ void menu () {
 
 					for (i = 0; i < 50; i++) {
 
-						if (strcmp(A.A[i].estudante.login,login) == 0 && strcmp(A.A[i].estudante.senha,senha)) {
+						if (strcmp(A.A[i].estudante.login,login) == 0 && strcmp(A.A[i].estudante.senha,senha) == 0) {
 
 							printf ("\n\n\tLogin realizado com sucesso!");
 							saidaLogin = 1;
@@ -1087,7 +1224,7 @@ void menu () {
 			
 			}
 
-			//salvarArquivosFunc(F);
+			salvarArquivosFunc(F);
 			//salvarArquivosAluno(A);
 			//salvarArquivosEdit(ED);
 			//salvarArquivosLivro(L);
