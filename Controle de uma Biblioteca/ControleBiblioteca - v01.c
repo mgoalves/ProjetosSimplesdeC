@@ -26,10 +26,10 @@
 #define FALSE 0
 
 #define qFunc 50 //Quantidade máxima de funcionarios permitido na biblioteca
-#define qAlunos 5000 //  || de alunos ||
-#define qLivros 15000 //  || de livros ||
-#define qEditoras 500 // || de editoras ||
-#define qEmprestimos 5000 // || de emprestimos ||
+#define qAlunos 50 //  || de alunos ||
+#define qLivros 50 //  || de livros ||
+#define qEditoras 50 // || de editoras ||
+#define qEmprestimos 50 // || de emprestimos ||
 
 //Estruturas ----------------------------------------------------------------------
 typedef struct {
@@ -37,19 +37,19 @@ typedef struct {
 	int cpf;
 	char email[15];
 	char nome[15];
-	short sexo; // 0-mulher 1-homem
+	short sexo; // 1-mulher 2-homem
 	char dataNasc[10];
 	char login[10];
-	char senha[10];
+	char senha[6];
 
 } pessoa;
 
 typedef struct {
 
-	char titulo[30];
+	char titulo[20];
 	short editora;
-	char autor[30];
-	char areaC[30];
+	char autor[20];
+	char areaC[20];
 	short quantidade;
 	short disponiveis;
 
@@ -59,7 +59,7 @@ typedef struct {
 
 	short tipo;
 	char numero[12];
-	short operadora; //Tim-0  Vivo-1  Oi-2 Claro-3 Nextel-4 Correios-5
+	short operadora; //Tim-1  Vivo-2  Oi-3 Claro-4 Nextel-5 Correios-6
 
 } telefone;
 
@@ -67,11 +67,11 @@ typedef struct {
 
 	char logradouro[30];
 	int num;
-	char complemento[15];
-	char bairro[15];
+	char complemento[10];
+	char bairro[10];
 	int cep;
 	char estado[3]; //Usar UF
-	char cidade[15];
+	char cidade[10];
 
 } endereco;
 
@@ -80,17 +80,17 @@ typedef struct {
 	char dataEmp[10];
 	char dataEst[10];
 	char dataCon[10];
-	int idAluno;
-	int idFunc;
+	short idAluno;
+	short idFunc;
 
 } emprestimo;
 
 typedef struct {
 
 	pessoa estudante;
-	int matricula;
+	short matricula;
 	short sitMatr; // 1 - Ativa 2 - Bloqueada 3 - Debito
-	char turma;
+	char turma[20];
 	endereco end;
 	telefone tel;
 
@@ -152,14 +152,27 @@ typedef struct {
 
 //Protopatipação de Funções na ordem em que esão dispostas no decorrer do codigo
 
+
+
+
+void zerarAluno(alunoEST A);
+void zerarEdit(editEST ED);
+void zerarLivro(livroEST L);
+void zerarEmp(empEST E);
+void zerarFunc(funcEST F);
+void salvarArquivosEmp(empEST E);
+void salvarArquivosLivro(livroEST L);
+void carregarArquivosLivro(livroEST *L);
+void salvarArquivosEdit(editEST ED);
+void carregarArquivosEdit(editEST *ED);
+void salvarArquivosAluno(alunoEST A);
+void carregarArquivosAluno(alunoEST *A);
 void salvarArquivosFunc(funcEST F);
 void carregarArquivosFunc(funcEST *F);
 void editarLivro(livroEST L);
 void cadastrarLivro(livroEST *L, editEST ED);
 void consultarLivro(livroEST L, editEST ED);
 void menu();
-
-
 
 //Funções para instaciar as listas criadas  ------------------------------------------------
 void criarListaFunc(funcEST *F) {
@@ -215,18 +228,494 @@ int verificarListaCheiaEmp (empEST E) {
 	return(E.Ult == qEmprestimos); // Quando Ult apontar para a posição Max a lista está cheia
 }
 
+
+
+void zerarAluno(alunoEST A){
+		
+	int i;
+	
+	for (i = 0; i < qAlunos; i++) {
+		
+		strcpy(A.A[i].end.bairro, "0");
+		A.A[i].end.cep = 0;
+		strcpy(A.A[i].end.cidade, "0");
+		strcpy(A.A[i].end.complemento, "0");
+		strcpy(A.A[i].end.estado, "0");
+		strcpy(A.A[i].end.logradouro, "0");
+		A.A[i].end.num = 0;
+			
+		A.A[i].estudante.cpf = 0;
+		strcpy(A.A[i].estudante.dataNasc, "0");
+		strcpy(A.A[i].estudante.email, "0");
+		strcpy(A.A[i].estudante.login, "0");
+		strcpy(A.A[i].estudante.nome, "0");
+		strcpy(A.A[i].estudante.senha, "0");
+		A.A[i].estudante.sexo = 0;
+		
+		A.A[i].matricula = 0;
+		A.A[i].sitMatr = 0;
+		
+		strcpy(A.A[i].tel.numero, "0");
+		A.A[i].tel.operadora = 0;
+		A.A[i].tel.tipo = 0;
+			
+		strcpy(A.A[i].turma, "0");
+		
+			//	strcpy( "0");
+		
+	}
+}
+void zerarEdit(editEST ED){
+	
+	int i;
+	
+	for (i = 0; i < qEditoras; i++) {
+		
+		strcpy(ED.ED[i].cnpj, "0");	
+		ED.ED[i].id = 0;
+		strcpy(ED.ED[i].nome, "0");
+
+		
+	}
+}
+void zerarLivro(livroEST L){
+	
+	int i;
+	
+	for (i = 0; i < qLivros; i++) {
+		
+		strcpy(L.L[i].areaC, "0");
+		strcpy(L.L[i].autor, "0");
+		L.L[i].disponiveis = 0;
+		L.L[i].editora = 0;
+		L.L[i].quantidade = 0;
+		strcpy(L.L[i].titulo, "0");
+
+	}
+}
+void zerarEmp(empEST E){
+	
+	int i;
+	
+	for (i = 0; i < qEmprestimos; i++) {
+		
+			strcpy(E.E[i].dataCon, "0");
+			strcpy(E.E[i].dataEmp, "0");
+			strcpy(E.E[i].dataEst, "0");
+			E.E[i].idAluno = 0;
+			E.E[i].idFunc = 0;
+		
+	}
+	
+}
+void zerarFunc(funcEST F) {
+	
+	int i;
+	
+	for (i = 0; i < qFunc; i++) {
+		
+		F.F[i].idAdm = 0;
+		strcpy(F.F[i].end.bairro, "0");
+		F.F[i].end.cep = 0;
+		strcpy(F.F[i].end.cidade,"0"); 
+		strcpy(F.F[i].end.complemento,"0"); 
+	    strcpy(F.F[i].end.estado, "0");
+		strcpy(F.F[i].end.logradouro, "0");
+		F.F[i].end.num = 0;
+		F.F[i].func.cpf = 0;
+		strcpy(F.F[i].func.dataNasc, "0");
+		strcpy(F.F[i].func.email, "0");
+		strcpy(F.F[i].func.login,"0"); 
+		strcpy(F.F[i].func.nome,"0"); 
+		strcpy(F.F[i].func.senha,"0"); 
+		F.F[i].func.sexo  = 0;
+		strcpy(F.F[i].tel.numero,"0"); 
+		F.F[i].tel.operadora = 0;
+		F.F[i].tel.tipo = 0;		
+		
+	}
+	
+}
+
+void salvarArquivosEmp(empEST E){
+	
+	FILE *arquivo;
+	
+	arquivo = fopen("Emprestimos.txt", "w+");
+	
+	int i;
+	
+	for (i = 0; i < qEmprestimos; i++) {
+		
+		if (E.E[i].idAluno == 0) {
+			
+			fprintf(arquivo, "0;0;0;0;0\n");
+			
+		} else {
+			
+			fprintf(arquivo, "%s;%s;%s;%d;%d\n",
+			
+				E.E[i].dataCon,
+				E.E[i].dataEmp,
+				E.E[i].dataEst, 
+				E.E[i].idAluno,
+				E.E[i].idFunc
+			
+			);
+			
+		}
+		
+	}
+	
+	fclose(arquivo);
+}
+void carregarArquivosEmp(empEST *E){
+	
+	FILE *arquivo;
+	
+	arquivo = fopen("Emprestimos.txt", "r+");
+	
+	//Variaveeis
+	emprestimo aux;
+	int i;
+	char linha[300];
+	int Z, P = E->Prim;
+	 
+	 for (i = 0; i < qEmprestimos; i++){
+	 	
+	 	fscanf(arquivo, "%s", linha);
+	 	
+	 	strcpy(aux.dataCon, strtok(linha, ";"));
+	 	strcpy(aux.dataEmp, strtok(NULL, ";"));
+	 	strcpy(aux.dataEst, strtok(NULL, ";"));
+	 	aux.idAluno = atoi (strtok(NULL, ";"));
+	 	aux.idFunc = atoi (strtok(NULL, "\n"));
+	 	
+	 	if (aux.idAluno != 0) {
+				
+				P = E -> Prim;
+	
+				while ((P < E -> Ult))
+					P++;
+	
+				if(P == E-> Ult) {
+
+					E -> E[P] = aux;
+					E -> Ult ++;
+
+				} else {
+
+					for(Z = E -> Ult; Z > P; Z--)
+						E -> E[Z] = E -> E[Z-1];
+					E -> E[P] = aux;
+					E -> Ult++;
+				}
+					
+			} //Fim do if
+		
+	}
+	
+	fclose(arquivo);
+}
+
+void salvarArquivosLivro(livroEST L){
+	
+	FILE *arquivo;
+	
+	arquivo = fopen("Livros.txt", "w+");
+	
+	int i;
+	
+	for (i = 0; i < qLivros; i++) {
+		
+		if (L.L[i].quantidade == 0) {
+			
+			fprintf(arquivo, "0;0;0;0;0;0\n");
+			
+		} else {
+		
+			fprintf(arquivo, "%s;%s;%d;%d;%d;%s\n", 
+			
+				L.L[i].areaC,
+				L.L[i].autor,
+				L.L[i].disponiveis,
+				L.L[i].editora,
+				L.L[i].quantidade,
+				L.L[i].titulo
+			);
+			
+		}
+		
+	}
+	
+	fclose(arquivo);
+}
+void carregarArquivosLivro(livroEST *L){
+
+	FILE *arquivo;
+	
+	arquivo = fopen ("Livros.txt", "r+");
+	
+	//Variaveis
+	livro aux;
+	int i;
+	char linha[400];
+	int Z, P = L->Prim;
+	
+	
+	
+	for (i = 0; i < qLivros; i++) {
+		
+		fscanf(arquivo, "%s", linha);
+		
+		strcpy(aux.areaC, strtok(linha, ";"));
+		strcpy(aux.autor, strtok(NULL, ";"));
+		aux.disponiveis = atoi (strtok(NULL, ";"));
+		aux.editora = atoi (strtok(NULL, ";"));
+		aux.quantidade = atoi (strtok(NULL, ";"));
+		strcpy(aux.titulo, strtok(NULL, "\n"));
+		
+		if(aux.quantidade != 0) {
+			
+			P = L -> Prim;
+	
+				while ((P < L -> Ult))
+					P++;
+	
+				if(P == L-> Ult) {
+
+					L -> L[P] = aux;
+					L -> Ult ++;
+
+				} else {
+
+					for(Z = L -> Ult; Z > P; Z--)
+						L -> L[Z] = L -> L[Z-1];
+					L -> L[P] = aux;
+					L -> Ult++;
+				}	
+		} //fim do if
+
+	}
+
+	fclose(arquivo);
+}
+
+void salvarArquivosEdit(editEST ED){
+	
+	FILE *arquivo;
+	
+	arquivo = fopen ("Editoras.txt", "w+");
+	
+	//Variaveis
+	int i;
+	
+	for (i = 0; i < qEditoras; i++){
+		
+		if(ED.ED[i].id == 0){
+			
+			fprintf(arquivo, "0;0;0\n");
+			
+		} else {
+			
+			fprintf(arquivo, "%s;%d;%s",
+			
+				ED.ED[i].cnpj,
+				ED.ED[i].id,
+				ED.ED[i].nome
+			);
+			
+		}
+		
+	}
+	
+	fclose(arquivo);
+}
+void carregarArquivosEdit(editEST *ED){
+	
+	FILE *arquivo;
+	
+	arquivo = fopen("Editoras.txt", "r+");
+	
+	//Variaveeis
+	editora aux;
+	int i;
+	char linha[100];
+	int Z, P = ED->Prim;
+	
+	for (i = 0; i < qEditoras; i++) {
+		
+		fscanf(arquivo, "%s", linha);
+		
+		
+		strcpy(aux.cnpj, strtok(linha, ";"));
+		aux.id = atoi (strtok(NULL, ";"));
+		strcpy(aux.nome, strtok(NULL, "\n"));
+		
+		if (aux.id != 0) {
+				
+				P = ED -> Prim;
+	
+				while ((P < ED -> Ult))
+					P++;
+	
+				if(P == ED-> Ult) {
+
+					ED -> ED[P] = aux;
+					ED -> Ult ++;
+
+				} else {
+
+					for(Z = ED -> Ult; Z > P; Z--)
+						ED -> ED[Z] = ED -> ED[Z-1];
+					ED -> ED[P] = aux;
+					ED -> Ult++;
+				}
+					
+			} //Fim do if
+		
+	}
+	
+	fclose(arquivo);
+}
+
+void salvarArquivosAluno(alunoEST A){
+	
+	FILE *arquivo;
+	
+	arquivo = fopen("Alunos.txt", "w+");
+	
+	int i;
+	
+	for (i = 0; i < qAlunos; i++) {
+		
+		if (A.A[i].matricula == 0) {
+			
+			fprintf (arquivo, "0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0\n");
+			
+		} else {
+			
+			fprintf(arquivo, "%s;%d;%s;%s;%s;%s;%d;%d;%s;%s;%s;%s;%s;%d;%d;%d;%s;%d;%d;%s\n", 
+			
+			A.A[i].end.bairro,
+			A.A[i].end.cep,
+			A.A[i].end.cidade,
+			A.A[i].end.complemento,
+			A.A[i].end.estado,
+			A.A[i].end.logradouro,
+			A.A[i].end.num,
+			
+			A.A[i].estudante.cpf,
+			A.A[i].estudante.dataNasc,
+			A.A[i].estudante.email,
+			A.A[i].estudante.login,
+			A.A[i].estudante.nome,
+			A.A[i].estudante.senha,
+			A.A[i].estudante.sexo,
+			
+			A.A[i].matricula,
+			A.A[i].sitMatr,
+			
+			A.A[i].tel.numero,
+			A.A[i].tel.operadora,
+			A.A[i].tel.tipo,
+			
+			A.A[i].turma
+			
+			);
+			
+		}//fim do else
+		
+	}
+	
+	fclose(arquivo);
+}
+void carregarArquivosAluno(alunoEST *A){
+	
+	FILE *arquivo;
+	
+	arquivo = fopen("Alunos.txt", "r+");
+	
+	//criação de var -------
+	aluno aux;
+	int i;
+	char linha[300];
+	int Z, P = A->Prim;
+	
+	for (i = 0; i < qAlunos; i++){
+		
+		fscanf(arquivo, "%s", linha);
+		
+			
+			strcpy(aux.end.bairro, strtok(linha, ";"));
+			aux.end.cep = atoi (strtok(NULL, ";"));
+			strcpy(aux.end.cidade, strtok(NULL, ";"));
+			strcpy(aux.end.complemento, strtok(NULL, ";"));
+			strcpy(aux.end.estado, strtok(NULL, ";"));
+			strcpy(aux.end.logradouro, strtok(NULL, ";"));
+			aux.end.num = atoi (strtok(NULL, ";"));
+			 
+			aux.estudante.cpf = atoi (strtok(NULL, ";"));
+			strcpy(aux.estudante.dataNasc, strtok(NULL, ";"));
+			strcpy(aux.estudante.email, strtok(NULL, ";"));
+			strcpy(aux.estudante.login, strtok(NULL, ";"));
+			strcpy(aux.estudante.nome, strtok(NULL, ";"));
+			strcpy(aux.estudante.senha, strtok(NULL, ";"));
+			aux.estudante.sexo = atoi (strtok(NULL, ";"));
+			
+			aux.matricula = atoi (strtok(NULL, ";"));
+			aux.sitMatr = atoi (strtok(NULL, ";"));
+			strcpy(aux.tel.numero, strtok(NULL, ";"));
+			aux.tel.operadora = atoi (strtok(NULL, ";"));
+			aux.tel.tipo = atoi (strtok(NULL, ";"));
+			
+			strcpy(aux.turma, strtok(NULL, "\n"));
+			
+			if (aux.matricula != 0) {
+				
+				P = A -> Prim;
+	
+				while ((P < A -> Ult))
+					P++;
+	
+				if(P == A-> Ult) {
+
+					A -> A[P] = aux;
+					A -> Ult ++;
+
+				} else {
+
+					for(Z = A-> Ult; Z > P; Z--)
+						A -> A[Z] = A -> A[Z-1];
+					A -> A[P] = aux;
+					A -> Ult++;
+				}
+					
+			} //Fim do if
+	}
+	
+	fclose(arquivo);
+}
+
 void salvarArquivosFunc (funcEST F) {
 	
 	FILE *arquivo;
 	
-	fopen("Funcionarios.txt", "w+");
+	arquivo = fopen("Funcionarios.txt", "w+");
 	
 	int i;
 	
 	
 	for (i = 0; i < qFunc; i++) {
 		
-		fprintf(arquivo, "%d;%s;%d;%s;%s;%s;%s;%d;%d;%s;%s;%s;%s;%s;%d;%s;%d;%d\n", 
+		
+		if (F.F[i].idAdm == 0){
+			
+			fprintf(arquivo, "0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0\n");
+			
+		} else {
+			
+			fprintf(arquivo, "%d;%s;%d;%s;%s;%s;%s;%d;%d;%s;%s;%s;%s;%s;%d;%s;%d;%d\n", 
 		
 				F.F[i].idAdm, 
 				F.F[i].end.bairro, 
@@ -247,97 +736,107 @@ void salvarArquivosFunc (funcEST F) {
 				F.F[i].tel.operadora, 
 				F.F[i].tel.tipo
 			);
+			
+		}
+		
+		
+		
 		
 	}
 }
-
-
 void carregarArquivosFunc(funcEST *F){
 
 	FILE *arquivo;
 	
 	arquivo = fopen("Funcionarios.txt", "r+");	
 	
-	char linha[250];
+	char linha[300];
 	int i;
-	funcionario aux[qFunc];
+	funcionario aux;
 	int A, P = F -> Prim;
 	
 	//------------------
 		
-		char* save = NULL;	
+	char* save = NULL;	
 	
 
 	for(i = 0; i < qFunc; i++){
 		
 		fscanf(arquivo, "%s", linha);
 		
-			aux[i].idAdm = atoi (strtok(linha, ";"));
+			aux.idAdm = atoi (strtok(linha, ";"));
+			
+					
+			strcpy(aux.end.bairro, strtok(NULL,";"));
+			aux.end.cep = atoi (strtok(NULL, ";"));
+			strcpy(aux.end.cidade, strtok(NULL,";"));
+			strcpy(aux.end.complemento, strtok(NULL,";"));
+			strcpy(aux.end.estado, strtok(NULL,";"));
+			strcpy(aux.end.logradouro, strtok(NULL,";"));
+			aux.end.num = atoi (strtok(NULL, ";"));
+	
+			aux.func.cpf = atoi (strtok(NULL, ";"));
+			strcpy(aux.func.dataNasc, strtok(NULL, ";"));
+			strcpy(aux.func.email, strtok(NULL, ";"));
+			strcpy(aux.func.login, strtok(NULL, ";"));
+			strcpy(aux.func.nome, strtok(NULL, ";"));
+			strcpy(aux.func.senha, strtok(NULL, ";"));
+			aux.func.sexo = atoi (strtok(NULL, ";"));
+			
+			strcpy(aux.tel.numero, strtok(NULL, ";"));
+			aux.tel.operadora = atoi (strtok(NULL, ";"));
+			aux.tel.tipo = atoi (strtok(NULL, "\n"));
+	
+	
+			//stardup só para cosulta posterior 
+			/*
+			aux.func.cpf = atoi (strtok(NULL, ";"));
+			save = strtok(NULL, ";");
+			strcpy(aux.func.dataNasc, strdup(save));	
+			save = strtok(NULL,";");
+			strcpy(aux.func.email, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux.func.login, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux.func.nome, strdup(save));
+			save = strtok(NULL,";");
+			strcpy(aux.func.senha, strdup(save));
+			
+			aux.func.sexo = atoi (strtok(NULL, ";"));
+			save = strtok(NULL,";");
+			strcpy(aux.tel.numero, strdup(save));
+			aux.tel.operadora = atoi (strtok(NULL, ";"));
+			aux.tel.tipo = atoi (strtok(NULL, "\n"));
+			*/
+			
+			
+			if(aux.idAdm != 0){
+				
+				P = F -> Prim;
+	
+				while ((P < F -> Ult))
+					P++;
+	
+				if(P == F-> Ult) {
 
-			save = strtok(NULL,";");			
-			strcpy(aux[i].end.bairro, strdup(save));
-			aux[i].end.cep = atoi (strtok(NULL, ";"));
-			save = strtok(NULL,";");
-			strcpy(aux[i].end.cidade, strdup(save));
-			save = strtok(NULL,";");
-			strcpy(aux[i].end.complemento, strdup(save));
-			save = strtok(NULL,";");
-			strcpy(aux[i].end.estado, strdup(save));
-			save = strtok(NULL,";");
-			strcpy(aux[i].end.logradouro, strdup(save));
-			aux[i].end.num = atoi (strtok(NULL, ";"));
-		
-		
-			aux[i].func.cpf = atoi (strtok(NULL, ";"));
-			save = strtok(NULL,";");
-			strcpy(aux[i].func.dataNasc, strdup(save));
-			save = strtok(NULL,";");
-			strcpy(aux[i].func.email, strdup(save));
-			save = strtok(NULL,";");
-			strcpy(aux[i].func.login, strdup(save));
-			save = strtok(NULL,";");
-			strcpy(aux[i].func.nome, strdup(save));
-			save = strtok(NULL,";");
-			strcpy(aux[i].func.senha, strdup(save));
-			aux[i].func.sexo = atoi (strtok(NULL, ";"));
-			save = strtok(NULL,";");
-			strcpy(aux[i].tel.numero, strdup(save));
-			aux[i].tel.operadora = atoi (strtok(NULL, ";"));
-			aux[i].tel.tipo = atoi (strtok(NULL, "\n"));
+					F -> F[P] = aux;
+					F -> Ult ++;
+
+				} else {
+
+					for(A = F-> Ult; A > P; A--)
+						F -> F[A] = F -> F[A-1];
+					F -> F[P] = aux;
+					F -> Ult++;
+				}
+					
+			} // fim do if
 			
-			
-			
+				
+	}
+	
 		//Codigo para adionar o item na lista, como já está estipulado o tamanho maximo
 		//nao precisa checar se a fila está cheia ou não.
-	
-		
-	}
-	
-	getch();
-
-	
-	for (i = 0; i <qFunc; i++) {
-		
-		P = F -> Prim;
-	
-		while ((P < F -> Ult))
-			P++;
-
-		if(P == F-> Ult) {
-
-			F -> F[P] = aux[i];
-			F -> Ult ++;
-
-		} else {
-
-			for(A = F-> Ult; A > P; A--)
-				F -> F[A] = F -> F[A-1];
-			F -> F[P] = aux[i];
-			F -> Ult++;
-		}
-		
-	}
-
 	
 	fclose(arquivo);
 	
@@ -614,22 +1113,23 @@ void menu () {
 		criarListaLivro(&L);
 		criarListaEmp(&E);
 
-				
-		strcpy(F.F[5].func.login,"adm");
-		strcpy(F.F[5].func.senha,"123");
-		F.F[5].idAdm = 1;
+		zerarFunc(F);
+		zerarAluno(A);
+		zerarEdit(ED);
+		zerarLivro(L);
+		zerarEmp(E);
 		
-		strcpy(A.A[5].estudante.login,"adm");
-		strcpy(A.A[5].estudante.senha,"123");
 		
+
 		carregarArquivosFunc(&F);
-		//carregarArquivosAluno(&A);
-		//carregarArquivosEdit(&ED);
-		//carregarArquivosLivro(&L);
-		//carregarArquivosEmp(&E);
+		carregarArquivosAluno(&A);
+		carregarArquivosEdit(&ED);
+		carregarArquivosLivro(&L);
+		carregarArquivosEmp(&E);
+
 
 		printf ("\n\n\tRecomendamos que use a tela em tamanho máximo para mais conforto.");
-		sleep(3);
+		//sleep(3);
 
 		short loginS = 0;
 		int i; //Usado para os laços de repetição sem comprometimento e necessidade posterior de
@@ -1225,10 +1725,10 @@ void menu () {
 			}
 
 			salvarArquivosFunc(F);
-			//salvarArquivosAluno(A);
-			//salvarArquivosEdit(ED);
-			//salvarArquivosLivro(L);
-			//salvarArquivosEmp(E);
+			salvarArquivosAluno(A);
+			salvarArquivosEdit(ED);
+			salvarArquivosLivro(L);
+			salvarArquivosEmp(E);
 
 			printf("\n\n\n\tObrigado por utilizar nosso sistema.");
 			
