@@ -1371,7 +1371,7 @@ void menu () {
 		carregarArquivosEmp(&E);
 		//*/
 		
-		/*
+		///*
 		F.F[0].idAdm = 1;
 		strcpy(F.F[0].func.login, "123");
 		strcpy(F.F[0].func.senha, "123");
@@ -1501,7 +1501,7 @@ void menu () {
 								printf("\n\t3 - Editar Livro");
 								printf("\n\t4 - Excluir Livro");
 								printf("\n\t5 - Livros com maior procura");
-								printf("\n\t7 - Sair");
+								printf("\n\t6 - Sair");
 								printf("\n\tOpcão: ");
 								scanf("%d", &menuS);
 								fflush(stdin);
