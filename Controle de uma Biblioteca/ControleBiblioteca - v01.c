@@ -153,7 +153,7 @@ typedef struct {
 //Protopatipação de Funções na ordem em que esão dispostas no decorrer do codigo
 
 
-
+void consultarEditora(editEST ED);
 void excluirLivro(livroEST *L);
 void zerarAluno(alunoEST *A);
 void zerarEdit(editEST *ED);
@@ -229,14 +229,81 @@ int verificarListaCheiaEmp (empEST E) {
 }
 
 
+
+
+
+void consultarEditora(editEST ED){
+
+	int editora, i = 0, aux;
+	char saida;
+
+	do {
+		aux = -1;
+		saida = 'n';
+		
+		system("cls");
+		printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+		printf("\n\tSub Menu -> Editoras -> Consulta de editoras");
+		printf("\n\tInsira o ID da editira para busca: ");
+		scanf(" %[^\n]", &editora);
+		fflush(stdin);
+		 
+		
+			for (i = 0; i < qEditoras; i++){
+				
+				if (ED.ED[i].id == editora) {
+					
+					aux = i;
+					
+				}
+			}
+			
+			if (aux == -1) {
+				
+				do{
+		
+					system("cls");
+					printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+					printf("\n\tSub Menu -> Editora -> Consulta de Editoras");
+		
+					printf("\n\n\tDesculpe, não foi possivel encontrar esta editora em nossa base de dados.");
+					printf("\n\n\tDeseja fazer uma nova busca?");
+					printf("\n\tS - Sim, ótima ideia!");
+					printf("\n\tN - Não, obrigado.");
+					printf("\n\tOpção: ");
+					
+					scanf(" %c", &saida);
+					fflush(stdin);
+			
+				} while (saida != 'n' && saida != 'N' && saida != 's' && saida != 'S');
+				
+				
+			} else {
+
+				system("cls");
+				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+				printf("\n\tSub Menu -> Editoras -> Consulta de editoras");
+				printf("\n\n\tID:      %d", ED.ED[aux].id);
+				printf("\n\tCNPJ:    %s", ED.ED[aux].cnpj);
+				printf("\n\tEditora: %s", ED.ED[aux].nome);
+				
+				getch();
+				
+			}
+
+	} while (saida != 'n' && saida != 'N');
+	
+}
+
 void excluirLivro(livroEST *L){
 	
 	int i; short aux = -1; char saida = 'n'; livro X;
 	char livro[30];
 	int Z, P = L -> Prim;
-
+	
 	
 	do {
+		aux = -1;
 			
 		system("cls");
 		printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
@@ -268,6 +335,7 @@ void excluirLivro(livroEST *L){
 				printf("\n\tOpção: ");
 				
 				scanf(" %c", &saida);
+				fflush(stdin);
 			
 			} while (saida != 'n' && saida != 'N' && saida != 's' && saida != 'S');
 		
@@ -286,6 +354,7 @@ void excluirLivro(livroEST *L){
 				printf("\n\n\tDeseja fazer uma nova busca?");
 				printf("\n\tS - Sim, ótima ideia!");
 				printf("\n\tN - Não, obrigado.");
+				printf("\n\tOpção: ");
 				scanf(" %c", &saida);
 			
 				} while (saida != 'n' && saida != 'N' && saida != 's' && saida != 'S');
@@ -293,22 +362,24 @@ void excluirLivro(livroEST *L){
 					if (saida == 's' || saida == 'S') {
 
   					  
-						while ((P < L -> Ult) && (livro != L->L[P].titulo))
-   							P = P +1;
+						while ((P < L -> Ult) && (livro != L->L[P].titulo)){
+							P = P +1;
+						}
    							
-   							strcpy(L->L[P].areaC, "0");
-							strcpy(L->L[P].autor, "0");
-							L->L[P].disponiveis = 0;
-							L->L[P].editora = 0;
-							L->L[P].quantidade = 0;
-							strcpy(L->L[P].titulo, "0");
-   							
+   							strcpy(L->L[aux].areaC, "0");
+							strcpy(L->L[aux].autor, "0");
+							L->L[aux].disponiveis = 0;
+							L->L[aux].editora = 0;
+							L->L[aux].quantidade = 0;
+							strcpy(L->L[aux].titulo, "0");   							
 				    
 						for (Z = P; Z < L -> Ult; Z++)
 							L -> L[Z] = L -> L[Z+1];
 						L -> Ult --;  
 	
 						printf("\n\n\tLivro excluido com sucesso.");
+						
+						saida = 'n';
 				  	  	 
 			  		} else {
 					
@@ -324,12 +395,12 @@ void excluirLivro(livroEST *L){
 						}
    							
    		
-   							strcpy(L->L[P].areaC, "0");
-							strcpy(L->L[P].autor, "0");
-							L->L[P].disponiveis = 0;
-							L->L[P].editora = 0;
-							L->L[P].quantidade = 0;
-							strcpy(L->L[P].titulo, "0");
+   							strcpy(L->L[aux].areaC, "0");
+							strcpy(L->L[aux].autor, "0");
+							L->L[aux].disponiveis = 0;
+							L->L[aux].editora = 0;
+							L->L[aux].quantidade = 0;
+							strcpy(L->L[aux].titulo, "0"); 
    	
 				    
 						for (Z = P; Z < L -> Ult; Z++)
@@ -1150,6 +1221,7 @@ void cadastrarLivro(livroEST *L, editEST ED){
 			if (verificarListaCheiaLivro(*L)) {
 
 				printf("\n\n\tA lista está cheia logo não foi possível adicionar um novo item.");
+				getch();
 
 			} else {
 				
@@ -1429,7 +1501,6 @@ void menu () {
 								printf("\n\t3 - Editar Livro");
 								printf("\n\t4 - Excluir Livro");
 								printf("\n\t5 - Livros com maior procura");
-								printf("\n\t6 - Livros com menor procura");
 								printf("\n\t7 - Sair");
 								printf("\n\tOpcão: ");
 								scanf("%d", &menuS);
@@ -1453,12 +1524,10 @@ void menu () {
 
 								} else if (menuS == 5) {
 
-								} else if (menuS == 6) {
-
 								}
 
 
-							} while (menuS != 7);
+							} while (menuS != 6);
 
 						} else if (menuP == 2) { 
 							menuS = 0;
@@ -1480,6 +1549,8 @@ void menu () {
 								if(menuS == 1) {
 
 								} else if (menuS == 2) {
+									
+									consultarEditora(ED);
 
 								} else if (menuS == 3) {
 
