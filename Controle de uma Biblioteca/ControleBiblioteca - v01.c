@@ -152,7 +152,7 @@ typedef struct {
 
 //Protopatipação de Funções na ordem em que esão dispostas no decorrer do codigo
 
-
+void cadastrarEditora(editEST *ED);
 void consultarEditora(editEST ED);
 void excluirLivro(livroEST *L);
 void zerarAluno(alunoEST *A);
@@ -230,7 +230,105 @@ int verificarListaCheiaEmp (empEST E) {
 
 
 
+void cadastrarEditora(editEST *ED){
+	
+	int edit, i = 0, aux = -1;
+	char saida;
+	int Z, P = ED->Prim;
+	editora auxE;
+	
+	do {
+		aux = -1;
+		saida = 'n';
+		
+		system("cls");
+		printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+		printf("\n\tSub Menu -> Editoras -> Cadastro de editoras");
+		printf("\n\tInsira o ID da editora: ");
+		scanf (" %d", &edit);
+		fflush(stdin);
+		
+		for (i = 0; i < qEditoras; i++) {
+			
+			if (ED->ED[i].id == edit){
+				
+				aux = edit;
+				
+			}
+			
+		}
+		
+		if (i != -1) {
+			
+			if (ED->Ult == qEditoras) {
+				
+				system("cls");
+				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+				printf("\n\tSub Menu -> Editoras -> Cadastro de editoras");
+				printf("\n\tA lista de Editoras já está completa, favor excluir para novo cadastro.");
+				
+			} else {
+				
+				
+				system("cls");
+				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+				printf("\n\tSub Menu -> Editoras -> Cadastro de editoras");
+				printf("\n\tInsira o nome da Editora: ");
+				gets(auxE.nome);
+				printf("\n\tInsira o CNPJ: ");
+				gets(auxE.cnpj);
+				auxE.id = edit;
+				
+				P = ED -> Prim;
+	
+				while ((P < ED -> Ult))
+					P++;
+	
+				if(P == ED-> Ult) {
 
+					ED -> ED[P] = auxE;
+					ED -> Ult ++;
+
+				} else {
+
+					for(Z = ED -> Ult; Z > P; Z--)
+						ED -> ED[Z] = ED -> ED[Z-1];
+					ED -> ED[P] = auxE;
+					ED -> Ult++;
+				}
+				
+				system("cls");
+				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+				printf("\n\tSub Menu -> Editoras -> Cadastro de editoras");
+				printf("\n\tEditora cadastrada com sucesso.");
+				
+				
+			}
+			
+		} else {
+			
+			do {
+				
+				system("cls");
+				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
+				printf("\n\tSub Menu -> Editoras -> Cadastro de editoras");
+		
+				printf("\n\n\tDesculpe, já existe ID no nosso banco de dados.");
+				printf("\n\n\tDeseja fazer uma nova busca?");
+				printf("\n\tS - Sim, ótima ideia!");
+				printf("\n\tN - Não, obrigado.");
+				printf("\n\tOpção: ");
+				scanf(" %c", &saida);
+				
+				
+			} while (saida != 'n' && saida != 'N' && saida != 's' && saida != 'S');
+			
+		}
+		
+		
+	} while (saida != 'n' && saida != 'N');
+	
+}
 
 void consultarEditora(editEST ED){
 
@@ -1547,12 +1645,16 @@ void menu () {
 								fflush(stdin);
 
 								if(menuS == 1) {
-
-								} else if (menuS == 2) {
 									
 									consultarEditora(ED);
 
+								} else if (menuS == 2) {
+									
+									cadastrarEditora(&ED);
+
 								} else if (menuS == 3) {
+									
+									
 
 								} else if (menuS == 4) {
 
