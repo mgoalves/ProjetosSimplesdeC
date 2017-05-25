@@ -258,7 +258,7 @@ void cadastrarEditora(editEST *ED){
 			
 		}
 		
-		if (i != -1) {
+		if (aux == -1) {
 			
 			if (ED->Ult == qEditoras) {
 				
@@ -266,6 +266,7 @@ void cadastrarEditora(editEST *ED){
 				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
 				printf("\n\tSub Menu -> Editoras -> Cadastro de editoras");
 				printf("\n\tA lista de Editoras já está completa, favor excluir para novo cadastro.");
+				getch();
 				
 			} else {
 				
@@ -301,6 +302,7 @@ void cadastrarEditora(editEST *ED){
 				printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
 				printf("\n\tSub Menu -> Editoras -> Cadastro de editoras");
 				printf("\n\tEditora cadastrada com sucesso.");
+				getch();
 				
 				
 			}
@@ -314,7 +316,7 @@ void cadastrarEditora(editEST *ED){
 				printf("\n\tSub Menu -> Editoras -> Cadastro de editoras");
 		
 				printf("\n\n\tDesculpe, já existe ID no nosso banco de dados.");
-				printf("\n\n\tDeseja fazer uma nova busca?");
+				printf("\n\n\tDeseja fazer um novo cadastro?");
 				printf("\n\tS - Sim, ótima ideia!");
 				printf("\n\tN - Não, obrigado.");
 				printf("\n\tOpção: ");
@@ -343,7 +345,7 @@ void consultarEditora(editEST ED){
 		printf ("\n\t\t\tMENU FUNCIONARIO\n\n\n");
 		printf("\n\tSub Menu -> Editoras -> Consulta de editoras");
 		printf("\n\tInsira o ID da editira para busca: ");
-		scanf(" %[^\n]", &editora);
+		scanf(" %d", &editora);
 		fflush(stdin);
 		 
 		
@@ -1469,11 +1471,12 @@ void menu () {
 		carregarArquivosEmp(&E);
 		//*/
 		
-		///*
+		/*
 		F.F[0].idAdm = 1;
 		strcpy(F.F[0].func.login, "123");
 		strcpy(F.F[0].func.senha, "123");
 		//*/
+		
 		printf ("\n\n\tRecomendamos que use a tela em tamanho máximo para mais conforto.");
 		//sleep(3);
 
